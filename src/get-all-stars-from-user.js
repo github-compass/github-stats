@@ -51,6 +51,7 @@ export default async (ghcp, user, maxPagination, perPage) => {
     starredRepos: _.flatten(starredRepos) };
   let udir = "../prior_responses/users";
   let userDir = path.join(__dirname, udir);
+  // TODO: change to populate database instead of file on filesystem
   fs.writeFile(path.join(userDir, user), JSON.stringify(output), function(err, res) {
     if (err) {
       winston.log('info', 'error writing file for user', user)
