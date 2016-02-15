@@ -35,7 +35,6 @@
     "bluebird": "^3.1.5",
     "bunyan": "^1.5.1",
     "eslint": "^1.10.3",
-    "github": "^0.2.4",
     "github4": "^0.5.1",
     "lodash": "^4.2.0",
     "parse-link-header": "^0.4.1",

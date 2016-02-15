@@ -15,7 +15,7 @@ winston.add(winston.transports.File, { filename: 'download_getallstars.log' });
  * @param {Number} maxPagination - max paginated requests
  * @param {Number} perPage - number per page
  */
-export default async (ghcp, user, maxPagination, perPage) => {
+export default async (ghcp, user, maxPagination, perPage, writeOutputToDisk) => {
   let per_page = perPage || 100;
   let maxPages = maxPagination || 10;
    if (!process.env.GHUSER || !process.env.GHPW ) {
@@ -35,7 +35,7 @@ export default async (ghcp, user, maxPagination, perPage) => {
 
     let starsPromises = _.map(_.range(2, linksPulled+1), function(pageNum, index) {
       winston.log('info', 'fetching star data : ' + pageNum + 'for user ' + user);
-        return ghcp.repos.getStarredFromUserAsync({
+        return ghcp.activity.getStarredReposForUserAsync({
           headers: {"Accept": "application/vnd.github.v3.star+json"},
           user: user,
           page: pageNum,
@@ -52,15 +52,19 @@ export default async (ghcp, user, maxPagination, perPage) => {
       linksPulled: linksPulled*per_page,
       maxLinks},
     starredRepos: _.flatten(starredRepos) };
-  let udir = "../prior_responses/users";
-  let userDir = path.join(__dirname, udir);
-  // TODO: change to populate database instead of file on filesystem
-  fs.writeFile(path.join(userDir, user), JSON.stringify(output), function(err, res) {
-    if (err) {
-      winston.log('info', 'error writing file for user', user)
-    } else {
-      winston.log('info', 'wrote file for user',  user)
-    }
-  });
+  if (writeOutputToDisk) {
+    // TODO: actually write somewhere generic
+    let udir = "../prior_responses/users";
+    let userDir = path.join(__dirname, udir);
+    // TODO: change to populate database instead of file on filesystem
+    fs.writeFile(path.join(userDir, user), JSON.stringify(output), function(err, res) {
+      if (err) {
+        winston.log('info', 'error writing file for user', user)
+      } else {
+        winston.log('info', 'wrote file for user',  user)
+      }
+    });
+  }
+
   return output;
 };
