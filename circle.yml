@@ -5,11 +5,11 @@ machine:
 dependencies:
   override:
     - docker info
-    - docker build -t halcyon-vortex/github-stats .
+    - docker build -t github-compass/github-stats .
 
 test:
   override:
-    - docker run halcyon-vortex/github-stats
+    - docker run github-compass/github-stats
 
 deployment:
   hub:
