@@ -1,4 +1,4 @@
-import Client from 'github';
+import Client from 'github4';
 import processUser from './process-user-aa';
 import processAllStargazers from './processAllStargazers';
 import getAllStarsFromUser from './get-all-stars-from-user'
@@ -22,8 +22,8 @@ let github = new Client({
 
 github.authenticate({
   type: "basic",
-  username: "umphx",
-  password: "zxcvasdfqwer1"
+  username: process.env.GHUSER,
+  password: process.env.GHPW
 });
 Promise.promisifyAll(github.repos);
 Promise.promisifyAll(github.user);

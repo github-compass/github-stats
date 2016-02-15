@@ -18,8 +18,11 @@ winston.add(winston.transports.File, { filename: 'download_getallstars.log' });
 export default async (ghcp, user, maxPagination, perPage) => {
   let per_page = perPage || 100;
   let maxPages = maxPagination || 10;
+   if (!process.env.GHUSER || !process.env.GHPW ) {
+     throw "GHUSER or GHPW not defined"
+   }
   let starData = await request
-    .get(`https://umphx:zxcvasdfqwer1@api.github.com/users/${user}/starred?per_page=${per_page}`)
+    .get(`https://${process.env.GHUSER}:${process.env.GHPW}@api.github.com/users/${user}/starred?per_page=${per_page}`)
     .accept("application/vnd.github.v3.star+json");
   let starredRepos = [];
   starredRepos.push(parseRepos(starData.body));
